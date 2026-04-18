@@ -1,0 +1,152 @@
+{
+  "titlebar": {
+    "import": "⊕ Importar",
+    "breadcrumbScene": "Mi escena",
+    "breadcrumbClip": "Clip nuevo",
+    "minimize": "Minimizar",
+    "maximize": "Maximizar",
+    "close": "Cerrar"
+  },
+  "language": {
+    "selector": "Idioma"
+  },
+  "sidebar": {
+    "tabAssets": "Assets",
+    "tabScene": "Escena",
+    "tabExport": "Exportar",
+    "upload": "Subir",
+    "dropLabel": "Suelta COLLADA / FBX",
+    "dropHint": ".dae • .fbx • .glb",
+    "sequence": "Secuencia",
+    "loaded": "Cargados",
+    "library": "Biblioteca",
+    "emptyLoaded": "No hay archivos importados",
+    "libraryHint": "Coloca archivos .dae / .fbx / .glb en src/library",
+    "loading": "Cargando…",
+    "error": "Error",
+    "example": "Ejemplo"
+  },
+  "viewer": {
+    "preview": "Vista previa",
+    "viewport": "VIEWPORT 3D",
+    "camera": "CÁMARA",
+    "seq": "Seq:",
+    "total": "Total:",
+    "clipCount": "{{count}} clips",
+    "engineEEVEE": "EEVEE",
+    "overlayMagic": "Magic Tools",
+    "overlayTime": "Time Original",
+    "overlayBg": "Fondo",
+    "noSelection": "Sin selección"
+  },
+  "playback": {
+    "start": "Inicio",
+    "prevFrame": "Fotograma anterior",
+    "playPause": "Reproducir / Pausa",
+    "nextFrame": "Siguiente fotograma",
+    "end": "Fin",
+    "loop": "Loop",
+    "render": "Render"
+  },
+  "timeline": {
+    "title": "Secuencia",
+    "meta": "{{count}} · {{duration}}",
+    "emptyMeta": "—",
+    "emptyHint": "Importa clips para ver la secuencia",
+    "thumbSelect": "Seleccionar {{name}}",
+    "remove": "Quitar",
+    "removeAria": "Quitar {{name}}"
+  },
+  "clip": {
+    "info": "Info del clip",
+    "file": "Archivo",
+    "format": "Formato",
+    "size": "Tamaño",
+    "duration": "Duración",
+    "frames": "Fotogramas",
+    "bones": "Huesos",
+    "none": "Selecciona un asset",
+    "camera": {
+      "label": "Cámara (secuencia)",
+      "default": "Predeterminado (órbita libre)",
+      "tilt": "Tilt",
+      "dollyIn": "Dolly in",
+      "dollyOut": "Dolly out",
+      "highAngle": "Plongée (ángulo alto)",
+      "handcam": "Handcam (shake)",
+      "handcamElastic": "Handcam elástico (carrera)"
+    }
+  },
+  "render": {
+    "title": "Render",
+    "engine": "Motor",
+    "res": "Res",
+    "shadows": "Sombras",
+    "motionBlur": "Motion Blur",
+    "background": "Fondo"
+  },
+  "genai": {
+    "sectionTitle": "Generación con IA",
+    "selectedFileLabel": "Archivo",
+    "noFileSelected": "Ningún archivo seleccionado",
+    "promptLabel": "Prompt",
+    "promptPlaceholder": "Describe lo que quieres generar o cambiar en el vídeo…",
+    "expandPrompt": "Ampliar editor",
+    "expandPromptAria": "Abrir el prompt en un editor más grande",
+    "promptModalTitle": "Editar prompt",
+    "closeModal": "Cerrar",
+    "generate": "GENERAR",
+    "sub": "Video‑a‑vídeo vía ComfyUI",
+    "comfyBaseUrl": "URL de ComfyUI",
+    "comfyWorkflow": "Workflow API (JSON)",
+    "comfyPickWorkflow": "Elegir archivo",
+    "comfyNoWorkflow": "Ninguno",
+    "comfyVideoNode": "ID nodo vídeo",
+    "comfyPromptNode": "ID nodo prompt",
+    "comfyNodePlaceholder": "ej.: 12",
+    "comfyVideoInputKey": "Clave input vídeo",
+    "comfyPromptInputKey": "Clave input texto",
+    "errorNoElectron": "Solo disponible en la app Electron.",
+    "errorNoVideo": "Selecciona un vídeo en la cola de salida.",
+    "errorNoPrompt": "Escribe un prompt.",
+    "errorNoWorkflow": "Elige el JSON del workflow (formato API).",
+    "errorNoNodes": "Indica los IDs de los nodos de vídeo y de prompt.",
+    "doneToastTitle": "Generación ComfyUI terminada",
+    "generating": "GENERANDO…",
+    "busySub": "ComfyUI procesando"
+  },
+  "outputQueue": {
+    "title": "Cola de salida",
+    "empty": "Aún no hay vídeos exportados",
+    "refresh": "Actualizar lista",
+    "openAria": "Abrir en el Explorador de archivos",
+    "selectGenAria": "Seleccionar para generación con IA",
+    "deselectGenAria": "Quitar selección para generación con IA",
+    "previewPlaceholder": "Selecciona un vídeo abajo para previsualizar",
+    "previewLoading": "Cargando…"
+  },
+  "status": {
+    "blender": "Blender 4.2 listo",
+    "ffmpeg": "FFmpeg 6.1",
+    "loadedLibrary": "{{loaded}} cargados · {{library}} biblioteca",
+    "gpu": "GPU: RTX 3080",
+    "renderIdle": "Render inactivo",
+    "version": "v0.1.0-alpha"
+  },
+  "exportVideo": {
+    "done": "Vídeo exportado: {{path}}",
+    "doneToastTitle": "Vídeo exportado",
+    "openInExplorer": "Abrir carpeta en el Explorador de archivos",
+    "copyPath": "Copiar ruta",
+    "openExplorerFailed": "No se pudo abrir el Explorador.",
+    "failed": "Error al exportar: {{msg}}",
+    "noElectron": "La exportación de vídeo solo está disponible en la app Electron.",
+    "copyError": "Copiar mensaje",
+    "closeToast": "Cerrar",
+    "copyFailed": "No se pudo copiar al portapapeles."
+  },
+  "errors": {
+    "unsupportedExt": "Extensión no soportada: {{name}}",
+    "readFail": "Error al leer {{name}}: {{msg}}"
+  }
+}

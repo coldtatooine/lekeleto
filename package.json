@@ -1,0 +1,43 @@
+{
+  "name": "lekeleto",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "dist-electron/main.cjs",
+  "scripts": {
+    "dev": "vite",
+    "build:electron": "node scripts/build-electron.mjs",
+    "build:electron:watch": "node scripts/build-electron.mjs --watch",
+    "dev:electron": "npm run build:electron && concurrently -k \"vite --host 127.0.0.1 --port 5173 --strictPort\" \"npm run build:electron:watch\" \"wait-on http-get://127.0.0.1:5173 && electron .\"",
+    "build": "vite build",
+    "preview": "vite preview",
+    "postinstall": "electron-builder install-app-deps"
+  },
+  "dependencies": {
+    "ffmpeg-static": "^5.2.0",
+    "better-sqlite3": "^11.8.1",
+    "i18next": "^26.0.4",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-i18next": "^17.0.2",
+    "three": "^0.172.0"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.13",
+    "@types/node": "^22.10.5",
+    "@types/react": "^19.0.2",
+    "@types/react-dom": "^19.0.2",
+    "@types/three": "^0.183.1",
+    "@vitejs/plugin-react": "^4.3.4",
+    "concurrently": "^9.1.2",
+    "electron": "^33.3.1",
+    "electron-builder": "^25.1.8",
+    "esbuild": "^0.24.2",
+    "typescript": "^5.7.2",
+    "vite": "^6.0.7",
+    "wait-on": "^8.0.1"
+  },
+  "engines": {
+    "node": ">=20 <25"
+  }
+}

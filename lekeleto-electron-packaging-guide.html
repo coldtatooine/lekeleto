@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lekeleto — Electron Packaging Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;700&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;0,9..144,900;1,9..144,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f5f0e8;
+    --ink: #1a1208;
+    --surface: #ede8de;
+    --border: #c8bfa8;
+    --accent: #c0392b;
+    --accent2: #2c6e49;
+    --accent3: #1a4e8a;
+    --accent4: #7b4f12;
+    --muted: #7a7060;
+    --code-bg: #1a1208;
+    --code-fg: #f0e6c8;
+    --sans: 'Fraunces', Georgia, serif;
+    --mono: 'IBM Plex Mono', monospace;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--sans);
+    min-height: 100vh;
+    line-height: 1.6;
+  }
+
+  /* Grain */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 999;
+  }
+
+  .page {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 64px 32px;
+  }
+
+  /* Header */
+  .masthead {
+    border-bottom: 3px solid var(--ink);
+    padding-bottom: 32px;
+    margin-bottom: 48px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: end;
+    gap: 24px;
+  }
+
+  .masthead-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  h1 {
+    font-size: clamp(32px, 5vw, 52px);
+    font-weight: 900;
+    line-height: 1.0;
+    letter-spacing: -0.02em;
+  }
+
+  h1 em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .masthead-meta {
+    text-align: right;
+  }
+
+  .meta-item {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    display: block;
+    line-height: 2;
+  }
+
+  .meta-item strong {
+    color: var(--ink);
+  }
+
+  /* Sections */
+  .section {
+    margin-bottom: 48px;
+    opacity: 0;
+    animation: appear 0.4s forwards;
+  }
+
+  .section:nth-child(1) { animation-delay: 0.05s; }
+  .section:nth-child(2) { animation-delay: 0.15s; }
+  .section:nth-child(3) { animation-delay: 0.25s; }
+  .section:nth-child(4) { animation-delay: 0.35s; }
+  .section:nth-child(5) { animation-delay: 0.45s; }
+  .section:nth-child(6) { animation-delay: 0.55s; }
+  .section:nth-child(7) { animation-delay: 0.65s; }
+
+  @keyframes appear {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 10px;
+  }
+
+  .section-num {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    flex-shrink: 0;
+  }
+
+  h2 {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+
+  h3 {
+    font-size: 15px;
+    font-weight: 700;
+    font-family: var(--mono);
+    color: var(--accent4);
+    margin-bottom: 8px;
+    margin-top: 20px;
+  }
+
+  p {
+    font-size: 15px;
+    color: var(--ink);
+    line-height: 1.75;
+    margin-bottom: 12px;
+  }
+
+  p.muted {
+    color: var(--muted);
+    font-size: 13px;
+  }
+
+  /* Code blocks */
+  pre {
+    background: var(--code-bg);
+    color: var(--code-fg);
+    font-family: var(--mono);
+    font-size: 12px;
+    line-height: 1.7;
+    padding: 20px 24px;
+    border-radius: 2px;
+    overflow-x: auto;
+    margin: 12px 0 20px;
+    border-left: 3px solid var(--accent);
+  }
+
+  code {
+    font-family: var(--mono);
+    font-size: 12px;
+    background: var(--surface);
+    padding: 2px 6px;
+    border: 1px solid var(--border);
+    color: var(--accent);
+  }
+
+  .comment { color: #6a5f45; }
+  .key { color: #e8b86d; }
+  .val { color: #98d4a3; }
+  .str { color: #f0a070; }
+  .kw { color: #80b4e8; }
+
+  /* Size breakdown table */
+  .size-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: var(--mono);
+    font-size: 12px;
+    margin: 16px 0 24px;
+  }
+
+  .size-table th {
+    background: var(--ink);
+    color: var(--bg);
+    padding: 10px 16px;
+    text-align: left;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+  }
+
+  .size-table td {
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+
+  .size-table tr:nth-child(even) td {
+    background: var(--surface);
+  }
+
+  .size-num {
+    color: var(--accent);
+    font-weight: 700;
+    white-space: nowrap;
+  }
+
+  .size-note {
+    color: var(--muted);
+    font-size: 11px;
+  }
+
+  .size-total td {
+    background: var(--ink) !important;
+    color: var(--bg);
+    font-weight: 700;
+  }
+
+  .size-total .size-num {
+    color: #f0a070;
+  }
+
+  /* Warning / info boxes */
+  .callout {
+    padding: 16px 20px;
+    margin: 16px 0;
+    border-left: 3px solid var(--callout-color, var(--accent3));
+    background: var(--surface);
+  }
+
+  .callout-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    color: var(--callout-color, var(--accent3));
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .callout p {
+    font-size: 13px;
+    margin: 0;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  /* Checklist */
+  .checklist {
+    list-style: none;
+    margin: 12px 0 20px;
+  }
+
+  .checklist li {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--ink);
+    padding: 8px 0;
+    border-bottom: 1px dashed var(--border);
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    line-height: 1.5;
+  }
+
+  .checklist li::before {
+    content: '□';
+    color: var(--accent);
+    flex-shrink: 0;
+    font-size: 14px;
+  }
+
+  .checklist li span {
+    color: var(--muted);
+    display: block;
+    font-size: 11px;
+    margin-top: 2px;
+  }
+
+  /* Dir tree */
+  .tree {
+    background: var(--code-bg);
+    color: var(--code-fg);
+    font-family: var(--mono);
+    font-size: 12px;
+    padding: 20px 24px;
+    line-height: 2;
+    border-left: 3px solid var(--accent2);
+    margin: 12px 0 20px;
+  }
+
+  .tree-dir { color: #80b4e8; }
+  .tree-file { color: #f0e6c8; }
+  .tree-size { color: #6a5f45; margin-left: 8px; }
+  .tree-note { color: #98d4a3; }
+
+  /* Footer rule */
+  .footer-rule {
+    border: none;
+    border-top: 3px double var(--border);
+    margin-top: 64px;
+    margin-bottom: 24px;
+  }
+
+  .footer-note {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    text-align: center;
+  }
+
+  /* Two columns */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin: 16px 0;
+  }
+
+  @media (max-width: 600px) {
+    .two-col { grid-template-columns: 1fr; }
+    .masthead { grid-template-columns: 1fr; }
+    .masthead-meta { text-align: left; }
+  }
+
+  .col-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 16px;
+  }
+
+  .col-box-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .col-box p {
+    font-size: 13px;
+    margin: 0;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="masthead">
+    <div>
+      <div class="masthead-label">Lekeleto // Decisão de Arquitetura // Desktop Windows</div>
+      <h1>Empacotar<br/><em>Tudo.</em></h1>
+    </div>
+    <div class="masthead-meta">
+      <span class="meta-item"><strong>Stack</strong> Electron + React</span>
+      <span class="meta-item"><strong>Blender</strong> 4.x portable</span>
+      <span class="meta-item"><strong>FFmpeg</strong> win64 static</span>
+      <span class="meta-item"><strong>Installer</strong> NSIS via electron-builder</span>
+    </div>
+  </div>
+
+  <!-- 1. Tamanho real -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">01</span>
+      <h2>Tamanho real do instalador</h2>
+    </div>
+    <p>Empacotando tudo, o instalador vai ser grande. É importante ter isso claro antes de começar.</p>
+
+    <table class="size-table">
+      <thead>
+        <tr>
+          <th>Componente</th>
+          <th>Tamanho</th>
+          <th>Estratégia</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Electron runtime (Chromium + Node)</td>
+          <td class="size-num">~180 MB</td>
+          <td><span class="size-note">Inevitável. É o custo do Electron.</span></td>
+        </tr>
+        <tr>
+          <td>React app + Three.js + deps</td>
+          <td class="size-num">~15 MB</td>
+          <td><span class="size-note">Bundle otimizado com Vite.</span></td>
+        </tr>
+        <tr>
+          <td>Blender 4.x portable (zip)</td>
+          <td class="size-num">~450 MB</td>
+          <td><span class="size-note">Versão portable sem Python standalone. Só o essencial.</span></td>
+        </tr>
+        <tr>
+          <td>FFmpeg win64 static</td>
+          <td class="size-num">~80 MB</td>
+          <td><span class="size-note">Ou ~25 MB com ffmpeg-static (NPM package).</span></td>
+        </tr>
+        <tr>
+          <td>SQLite (better-sqlite3)</td>
+          <td class="size-num">&lt;2 MB</td>
+          <td><span class="size-note">Bundle nativo pelo electron-builder.</span></td>
+        </tr>
+      </tbody>
+      <tr class="size-total">
+        <td>Total instalado (aprox.)</td>
+        <td class="size-num">~720 MB</td>
+        <td>Instalador NSIS comprimido: ~400 MB</td>
+      </tr>
+    </table>
+
+    <div class="callout" style="--callout-color: #c0392b;">
+      <div class="callout-label">⚠ Consideração importante</div>
+      <p>O Blender completo inclui assets, templates e add-ons que você não vai usar. Considere uma build customizada do Blender removendo o que não é necessário, reduzindo para ~200 MB. A Blender Foundation documenta como fazer isso via scripts de build.</p>
+    </div>
+  </div>
+
+  <!-- 2. Estrutura de pastas -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">02</span>
+      <h2>Estrutura de diretórios do app</h2>
+    </div>
+
+    <div class="tree">
+<span class="tree-dir">lekeleto/</span>
+├── <span class="tree-dir">resources/</span>               <span class="tree-note"># empacotado pelo electron-builder</span>
+│   ├── <span class="tree-dir">blender/</span>             <span class="tree-note"># blender portable extraído</span>
+│   │   ├── <span class="tree-file">blender.exe</span>     <span class="tree-size">← executável principal</span>
+│   │   ├── <span class="tree-dir">4.x/</span>             <span class="tree-note"># versão de scripts Python</span>
+│   │   └── <span class="tree-dir">datafiles/</span>
+│   ├── <span class="tree-dir">ffmpeg/</span>
+│   │   └── <span class="tree-file">ffmpeg.exe</span>      <span class="tree-size">← static build win64</span>
+│   └── <span class="tree-dir">python-scripts/</span>
+│       ├── <span class="tree-file">render_sequence.py</span>
+│       └── <span class="tree-file">export_frames.py</span>
+├── <span class="tree-dir">src/</span>
+│   ├── <span class="tree-dir">main/</span>               <span class="tree-note"># Electron main process</span>
+│   │   ├── <span class="tree-file">main.ts</span>
+│   │   ├── <span class="tree-file">ipc-handlers.ts</span>
+│   │   └── <span class="tree-file">binary-paths.ts</span>  <span class="tree-note"># resolve paths em dev/prod</span>
+│   └── <span class="tree-dir">renderer/</span>           <span class="tree-note"># React app (Three.js, UI)</span>
+│       ├── <span class="tree-file">App.tsx</span>
+│       ├── <span class="tree-dir">viewer/</span>
+│       ├── <span class="tree-dir">timeline/</span>
+│       └── <span class="tree-dir">upload/</span>
+├── <span class="tree-file">electron-builder.yml</span>
+└── <span class="tree-file">package.json</span>
+    </div>
+  </div>
+
+  <!-- 3. binary-paths.ts -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">03</span>
+      <h2>Resolução de paths: dev vs produção</h2>
+    </div>
+    <p>O maior problema de apps Electron com binários externos é que os paths mudam completamente entre desenvolvimento e produção. Esse módulo centraliza isso.</p>
+
+<pre><span class="comment">// src/main/binary-paths.ts</span>
+<span class="kw">import</span> { app } <span class="kw">from</span> <span class="str">'electron'</span>
+<span class="kw">import</span> path <span class="kw">from</span> <span class="str">'path'</span>
+
+<span class="kw">const</span> isDev = !app.isPackaged
+
+<span class="kw">function</span> resourcesPath(): string {
+  <span class="kw">if</span> (isDev) {
+    <span class="comment">// Em dev: pasta resources/ na raiz do projeto</span>
+    <span class="kw">return</span> path.join(__dirname, <span class="str">'../../resources'</span>)
+  }
+  <span class="comment">// Em produção: process.resourcesPath aponta para</span>
+  <span class="comment">// AppData/Local/Lekeleto/resources (após instalação)</span>
+  <span class="kw">return</span> process.resourcesPath
+}
+
+<span class="kw">export const</span> BLENDER_PATH = path.join(
+  resourcesPath(), <span class="str">'blender'</span>, <span class="str">'blender.exe'</span>
+)
+
+<span class="kw">export const</span> FFMPEG_PATH = path.join(
+  resourcesPath(), <span class="str">'ffmpeg'</span>, <span class="str">'ffmpeg.exe'</span>
+)
+
+<span class="kw">export const</span> SCRIPTS_PATH = path.join(
+  resourcesPath(), <span class="str">'python-scripts'</span>
+)</pre>
+  </div>
+
+  <!-- 4. Chamando Blender -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">04</span>
+      <h2>Chamando Blender e FFmpeg via IPC</h2>
+    </div>
+    <p>O renderer (React) nunca chama binários diretamente. Ele envia mensagens IPC para o main process, que executa o <code>child_process</code>.</p>
+
+<pre><span class="comment">// src/main/ipc-handlers.ts</span>
+<span class="kw">import</span> { ipcMain } <span class="kw">from</span> <span class="str">'electron'</span>
+<span class="kw">import</span> { spawn } <span class="kw">from</span> <span class="str">'child_process'</span>
+<span class="kw">import</span> { BLENDER_PATH, FFMPEG_PATH, SCRIPTS_PATH } <span class="kw">from</span> <span class="str">'./binary-paths'</span>
+<span class="kw">import</span> path <span class="kw">from</span> <span class="str">'path'</span>
+
+ipcMain.handle(<span class="str">'render:start'</span>, <span class="kw">async</span> (event, { sequencePath, outputDir }) => {
+  <span class="kw">return new</span> Promise((resolve, reject) => {
+    <span class="kw">const</span> script = path.join(SCRIPTS_PATH, <span class="str">'render_sequence.py'</span>)
+
+    <span class="kw">const</span> proc = spawn(BLENDER_PATH, [
+      <span class="str">'--background'</span>,
+      <span class="str">'--python'</span>, script,
+      <span class="str">'--'</span>,                    <span class="comment">// args após '--' vão pro script Python</span>
+      <span class="str">'--sequence'</span>, sequencePath,
+      <span class="str">'--output'</span>, outputDir,
+    ])
+
+    proc.stdout.on(<span class="str">'data'</span>, (data) => {
+      <span class="comment">// Envia progresso pro renderer em tempo real</span>
+      event.sender.send(<span class="str">'render:progress'</span>, data.toString())
+    })
+
+    proc.on(<span class="str">'close'</span>, (code) => {
+      code === 0 ? resolve({ success: true }) : reject(new Error(`Exit ${code}`))
+    })
+  })
+})
+
+ipcMain.handle(<span class="str">'ffmpeg:encode'</span>, <span class="kw">async</span> (_, { framesDir, outputFile }) => {
+  <span class="kw">return new</span> Promise((resolve, reject) => {
+    <span class="kw">const</span> proc = spawn(FFMPEG_PATH, [
+      <span class="str">'-framerate'</span>, <span class="str">'24'</span>,
+      <span class="str">'-i'</span>, path.join(framesDir, <span class="str">'frame_%04d.png'</span>),
+      <span class="str">'-c:v'</span>, <span class="str">'libx264'</span>,
+      <span class="str">'-pix_fmt'</span>, <span class="str">'yuv420p'</span>,
+      <span class="str">'-crf'</span>, <span class="str">'18'</span>,
+      outputFile
+    ])
+    proc.on(<span class="str">'close'</span>, (code) =>
+      code === 0 ? resolve({ outputFile }) : reject(new Error(`FFmpeg exit ${code}`))
+    )
+  })
+})</pre>
+  </div>
+
+  <!-- 5. electron-builder.yml -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">05</span>
+      <h2>Configuração do electron-builder</h2>
+    </div>
+    <p>A chave é a diretiva <code>extraResources</code>, que copia as pastas de binários para dentro do instalador sem incluir no bundle JS.</p>
+
+<pre><span class="comment"># electron-builder.yml</span>
+<span class="key">appId</span>: <span class="str">com.lekeleto.app</span>
+<span class="key">productName</span>: <span class="str">Lekeleto</span>
+<span class="key">copyright</span>: <span class="str">Copyright 2025</span>
+
+<span class="key">directories</span>:
+  <span class="key">output</span>: <span class="str">dist-installer</span>
+
+<span class="key">files</span>:
+  - <span class="str">dist/**/*</span>           <span class="comment"># build do Vite/React</span>
+  - <span class="str">dist-electron/**/*</span>  <span class="comment"># build do main process</span>
+
+<span class="key">extraResources</span>:
+  - <span class="key">from</span>: <span class="str">resources/blender</span>
+    <span class="key">to</span>: <span class="str">blender</span>
+    <span class="key">filter</span>:
+      - <span class="str">"**/*"</span>
+      - <span class="str">"!**/__pycache__/**"</span>  <span class="comment"># exclui cache Python</span>
+  - <span class="key">from</span>: <span class="str">resources/ffmpeg</span>
+    <span class="key">to</span>: <span class="str">ffmpeg</span>
+  - <span class="key">from</span>: <span class="str">resources/python-scripts</span>
+    <span class="key">to</span>: <span class="str">python-scripts</span>
+
+<span class="key">win</span>:
+  <span class="key">target</span>:
+    - <span class="key">target</span>: <span class="str">nsis</span>
+      <span class="key">arch</span>: [<span class="str">x64</span>]
+  <span class="key">icon</span>: <span class="str">build/icon.ico</span>
+
+<span class="key">nsis</span>:
+  <span class="key">oneClick</span>: <span class="kw">false</span>          <span class="comment"># permite escolher pasta de instalação</span>
+  <span class="key">allowToChangeInstallationDirectory</span>: <span class="kw">true</span>
+  <span class="key">installerIcon</span>: <span class="str">build/icon.ico</span>
+  <span class="key">createDesktopShortcut</span>: <span class="kw">true</span>
+  <span class="key">runAfterFinish</span>: <span class="kw">true</span></pre>
+  </div>
+
+  <!-- 6. better-sqlite3 -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">06</span>
+      <h2>SQLite: banco de dados local</h2>
+    </div>
+    <p>Para persistir projetos, assets e histórico de jobs localmente, <code>better-sqlite3</code> é a escolha certa. Requer rebuild nativo para a versão do Electron.</p>
+
+<pre><span class="comment"># package.json — scripts obrigatórios</span>
+{
+  <span class="key">"scripts"</span>: {
+    <span class="key">"postinstall"</span>: <span class="str">"electron-builder install-app-deps"</span>
+  },
+  <span class="key">"dependencies"</span>: {
+    <span class="key">"better-sqlite3"</span>: <span class="str">"^9.x"</span>
+  }
+}</pre>
+
+    <div class="callout" style="--callout-color: #2c6e49;">
+      <div class="callout-label">✓ Por que better-sqlite3</div>
+      <p>API síncrona (ideal pro main process), zero overhead de servidor, arquivo único no AppData do usuário. Perfeito para armazenar projetos, sequências e metadados de jobs.</p>
+    </div>
+  </div>
+
+  <!-- 7. Checklist de setup -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">07</span>
+      <h2>Checklist de setup do projeto</h2>
+    </div>
+
+    <ul class="checklist">
+      <li>
+        Baixar Blender 4.x portable (.zip, não installer) e extrair em <code>resources/blender/</code>
+        <span>blender.org/download → Portable (.zip) → Windows x64</span>
+      </li>
+      <li>
+        Baixar FFmpeg static build para Windows
+        <span>ffmpeg.org/download → Windows builds by BtbN → ffmpeg-master-latest-win64-gpl-shared.zip</span>
+      </li>
+      <li>
+        Criar projeto Electron com Vite + React + TypeScript
+        <span>npm create @quick-start/electron ou electron-vite scaffold</span>
+      </li>
+      <li>
+        Instalar e configurar electron-builder com extraResources
+        <span>npm i -D electron-builder</span>
+      </li>
+      <li>
+        Instalar better-sqlite3 e rodar postinstall (rebuild nativo)
+        <span>npm i better-sqlite3 && npm run postinstall</span>
+      </li>
+      <li>
+        Configurar binary-paths.ts com lógica dev/prod
+        <span>Testar os dois cenários antes de avançar no resto</span>
+      </li>
+      <li>
+        Testar spawn do Blender headless com script Python mínimo
+        <span>Confirmar que blender.exe roda via child_process antes de integrar Three.js</span>
+      </li>
+      <li>
+        Testar encode FFmpeg com frames de teste
+        <span>Validar codec h264 e yuv420p antes de conectar ao pipeline</span>
+      </li>
+    </ul>
+  </div>
+
+  <!-- 8. Duas abordagens de distribuição -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">08</span>
+      <h2>Distribuição: NSIS vs Portable</h2>
+    </div>
+
+    <div class="two-col">
+      <div class="col-box">
+        <div class="col-box-label">NSIS Installer</div>
+        <p>Instala no <code>Program Files</code>, cria atalhos, aparece no "Desinstalar Programas". Experiência profissional. Requer UAC para instalar.</p>
+      </div>
+      <div class="col-box">
+        <div class="col-box-label">Portable (.zip)</div>
+        <p>Executa sem instalar. Ideal para testes e distribuição interna. Sem UAC. O usuário descomprime e executa. Mais fácil de iterar no início.</p>
+      </div>
+    </div>
+
+    <p class="muted">Recomendação: começar com Portable para os primeiros testes internos. Migrar para NSIS quando estiver pronto para distribuição real. O electron-builder suporta ambos simultaneamente.</p>
+  </div>
+
+  <hr class="footer-rule"/>
+  <p class="footer-note">Próximo passo: scaffold do projeto Electron + teste do spawn do Blender headless</p>
+
+</div>
+</body>
+</html>

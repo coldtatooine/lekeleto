@@ -1,0 +1,152 @@
+{
+  "titlebar": {
+    "import": "⊕ Import",
+    "breadcrumbScene": "My Scene",
+    "breadcrumbClip": "New Clip",
+    "minimize": "Minimize",
+    "maximize": "Maximize",
+    "close": "Close"
+  },
+  "language": {
+    "selector": "Language"
+  },
+  "sidebar": {
+    "tabAssets": "Assets",
+    "tabScene": "Scene",
+    "tabExport": "Export",
+    "upload": "Upload",
+    "dropLabel": "Drop COLLADA / FBX",
+    "dropHint": ".dae • .fbx • .glb",
+    "sequence": "Sequence",
+    "loaded": "Loaded",
+    "library": "Library",
+    "emptyLoaded": "No files imported",
+    "libraryHint": "Place .dae / .fbx / .glb files in src/library",
+    "loading": "Loading…",
+    "error": "Error",
+    "example": "Sample"
+  },
+  "viewer": {
+    "preview": "Preview",
+    "viewport": "3D VIEWPORT",
+    "camera": "CAMERA",
+    "seq": "Seq:",
+    "total": "Total:",
+    "clipCount": "{{count}} clips",
+    "engineEEVEE": "EEVEE",
+    "overlayMagic": "Magic Tools",
+    "overlayTime": "Time Original",
+    "overlayBg": "Background",
+    "noSelection": "No selection"
+  },
+  "playback": {
+    "start": "Start",
+    "prevFrame": "Previous frame",
+    "playPause": "Play / Pause",
+    "nextFrame": "Next frame",
+    "end": "End",
+    "loop": "Loop",
+    "render": "Render"
+  },
+  "timeline": {
+    "title": "Sequence",
+    "meta": "{{count}} · {{duration}}",
+    "emptyMeta": "—",
+    "emptyHint": "Import clips to see the sequence",
+    "thumbSelect": "Select {{name}}",
+    "remove": "Remove",
+    "removeAria": "Remove {{name}}"
+  },
+  "clip": {
+    "info": "Clip Info",
+    "file": "File",
+    "format": "Format",
+    "size": "Size",
+    "duration": "Duration",
+    "frames": "Frames",
+    "bones": "Bones",
+    "none": "Select an asset",
+    "camera": {
+      "label": "Camera (sequence)",
+      "default": "Default (free orbit)",
+      "tilt": "Tilt",
+      "dollyIn": "Dolly in",
+      "dollyOut": "Dolly out",
+      "highAngle": "High angle (plongê)",
+      "handcam": "Handcam (shake)",
+      "handcamElastic": "Elastic handcam (running)"
+    }
+  },
+  "render": {
+    "title": "Render",
+    "engine": "Engine",
+    "res": "Res",
+    "shadows": "Shadows",
+    "motionBlur": "Motion Blur",
+    "background": "Background"
+  },
+  "genai": {
+    "sectionTitle": "AI generation",
+    "selectedFileLabel": "File",
+    "noFileSelected": "No file selected",
+    "promptLabel": "Prompt",
+    "promptPlaceholder": "Describe what you want to generate or change in the video…",
+    "expandPrompt": "Expand editor",
+    "expandPromptAria": "Open prompt in a larger editor",
+    "promptModalTitle": "Edit prompt",
+    "closeModal": "Close",
+    "generate": "GENERATE",
+    "sub": "Video‑to‑video via ComfyUI",
+    "comfyBaseUrl": "ComfyUI URL",
+    "comfyWorkflow": "API workflow (JSON)",
+    "comfyPickWorkflow": "Choose file",
+    "comfyNoWorkflow": "None",
+    "comfyVideoNode": "Video node ID",
+    "comfyPromptNode": "Prompt node ID",
+    "comfyNodePlaceholder": "e.g. 12",
+    "comfyVideoInputKey": "Video input key",
+    "comfyPromptInputKey": "Text input key",
+    "errorNoElectron": "Only available in the Electron app.",
+    "errorNoVideo": "Select a video from the output queue.",
+    "errorNoPrompt": "Enter a prompt.",
+    "errorNoWorkflow": "Choose the workflow JSON (API format).",
+    "errorNoNodes": "Set the video and prompt node IDs.",
+    "doneToastTitle": "ComfyUI generation finished",
+    "generating": "GENERATING…",
+    "busySub": "ComfyUI processing"
+  },
+  "outputQueue": {
+    "title": "Output Queue",
+    "empty": "No exported videos yet",
+    "refresh": "Refresh list",
+    "openAria": "Open in File Explorer",
+    "selectGenAria": "Select for AI generation",
+    "deselectGenAria": "Remove from AI generation selection",
+    "previewPlaceholder": "Select a video below to preview",
+    "previewLoading": "Loading…"
+  },
+  "status": {
+    "blender": "Blender 4.2 Ready",
+    "ffmpeg": "FFmpeg 6.1",
+    "loadedLibrary": "{{loaded}} loaded · {{library}} library",
+    "gpu": "GPU: RTX 3080",
+    "renderIdle": "Render idle",
+    "version": "v0.1.0-alpha"
+  },
+  "exportVideo": {
+    "done": "Video exported: {{path}}",
+    "doneToastTitle": "Video exported",
+    "openInExplorer": "Open folder in File Explorer",
+    "copyPath": "Copy path",
+    "openExplorerFailed": "Could not open File Explorer.",
+    "failed": "Export failed: {{msg}}",
+    "noElectron": "Video export is only available in the Electron app.",
+    "copyError": "Copy message",
+    "closeToast": "Close",
+    "copyFailed": "Could not copy to the clipboard."
+  },
+  "errors": {
+    "unsupportedExt": "Unsupported extension: {{name}}",
+    "readFail": "Failed to read {{name}}: {{msg}}"
+  }
+}
